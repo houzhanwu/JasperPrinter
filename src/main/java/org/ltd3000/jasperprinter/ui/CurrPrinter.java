@@ -95,7 +95,7 @@ public class CurrPrinter extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						PrintXmlService service = PrintXmlService.getInstance();
 						if (txtPrintName.getText().isEmpty()) {
-							JOptionPane.showMessageDialog(null, "注册打印机不能为空!");
+							JOptionPane.showMessageDialog(null, "注册打印机名称为空!");
 							return;
 						}
 						if (service.savePrinter(txtPrintName.getText().toUpperCase(),
@@ -103,9 +103,9 @@ public class CurrPrinter extends JDialog {
 							printerTable.setModel(new DefaultTableModel(service.getPrinterModel(),
 									new String[] { "\u5E8F\u53F7", "\u6CE8\u518C\u6253\u5370\u673A",
 											"\u7CFB\u7EDF\u6253\u5370\u673A", "\u662F\u5426\u4F7F\u7528" }));
-							JOptionPane.showMessageDialog(contentPanel, "打印机处理成功!");
+							JOptionPane.showMessageDialog(contentPanel, "打印机绑定成功!");
 						} else {
-							JOptionPane.showMessageDialog(contentPanel, "打印机处理失败!");
+							JOptionPane.showMessageDialog(contentPanel, "打印机绑定失败!");
 						}
 					}
 				});

@@ -29,13 +29,13 @@ public class MailUtil {
 			String filepath) {
 		final Properties props = new Properties();// ConfigUtil
 		// 表示SMTP发送邮件，需要进行身份验证
-		props.put("mail.smtp.auth", ConfigUtil.getProperty("mail.smtp.auth"));
+		props.put("mail.smtp.auth", "true");
 
-		props.put("mail.smtp.host", ConfigUtil.getProperty("mail.smtp.host"));
+		props.put("mail.smtp.host", "smtp.163.com");
 
-		props.put("mail.user", ConfigUtil.getProperty("mail.user"));
+		props.put("mail.user", "zhuce897@163.com");
 
-		props.put("mail.password", ConfigUtil.getProperty("mail.password"));
+		props.put("mail.password", "mcc613");
 
 		// 构建授权信息，用于进行SMTP进行身份验证
 		Authenticator authenticator = new Authenticator() {
@@ -73,22 +73,23 @@ public class MailUtil {
 			BodyPart messageBodyPart = new MimeBodyPart();
 
 			// 消息
-			messageBodyPart.setText("This is message body");
+			messageBodyPart.setText(content);
 
 			// 创建多重消息
 			Multipart multipart = new MimeMultipart();
-
+			multipart.addBodyPart(messageBodyPart);
 			// 设置文本消息部分
-			multipart.addBodyPart(messageBodyPart);
+			if(filepath!=null) {
+				// 附件部分
+				messageBodyPart = new MimeBodyPart();
 
-			// 附件部分
-			messageBodyPart = new MimeBodyPart();
+				DataSource source = new FileDataSource(filepath);
+				messageBodyPart.setDataHandler(new DataHandler(source));
+				messageBodyPart.setFileName(filepath);
+				multipart.addBodyPart(messageBodyPart);
 
-			DataSource source = new FileDataSource(filepath);
-			messageBodyPart.setDataHandler(new DataHandler(source));
-			messageBodyPart.setFileName(filepath);
-			multipart.addBodyPart(messageBodyPart);
-
+			}
+			
 			// 设置邮件的内容体
 			message.setContent(multipart, "text/html;charset=UTF-8");
 			// 发送邮件

@@ -26,9 +26,10 @@ import org.ltd3000.jasperprinter.utils.FtpUtils;
 
 public class PrintXmlService extends PrintService {
 
+	// 默认xmlPath：currentPath/xml
 	private final String XMLPATH = "xmlpath";
+	private String xmlPath = "/xml";
 
-	private String xmlPath = "\\xml";
 	// 打印服务
 	public static PrintXmlService instance = null;
 	// 打印机清单
@@ -37,13 +38,13 @@ public class PrintXmlService extends PrintService {
 	private static final Logger log = Logger.getLogger("XMLPrintService");
 
 	private PrintXmlService() {
-		log.info("当前打印服务类型为XML打印。");
-		loadConfig();
-		loadPrinter();
-		this.setActive(true);
-		startCleanPDFThread();
-		startCleanXMLThread();
-		startCleanBakThread();
+		log.info("打印服务类型为XML打印");
+		loadConfig();// 加载工作区配置
+		loadPrinter();// 加载打印机
+		this.setActive(true);//启动服务
+		startCleanPDFThread();//启动PDF清理线程
+		startCleanXMLThread();//启动XML清理线程
+		startCleanBakThread();//启动备份task文件清理线程
 		if ("master".equalsIgnoreCase(ConfigUtil.getProperty("mode"))) {
 			startDeliverThread();
 			Log.info("打印模式为服务器");
@@ -54,6 +55,7 @@ public class PrintXmlService extends PrintService {
 		}
 	}
 
+	// 加载工作区配置
 	@Override
 	public void loadConfig() {
 		Properties prop = new Properties();
@@ -62,17 +64,17 @@ public class PrintXmlService extends PrintService {
 			String currentpath = new File("").getAbsolutePath();
 			File f = new File(SYSCONFIGFILE);
 			if (!f.exists()) {
-				this.xmlPath = currentpath + "\\xml";
-				this.rptPath = currentpath + "\\label";
-				this.stationPath = currentpath + "\\station";
-				this.pdfPath = currentpath + "\\pdfpath";
+				this.xmlPath = currentpath + "/xml";
+				this.rptPath = currentpath + "/label";
+				this.stationPath = currentpath + "/station";
+				this.pdfPath = currentpath + "/pdfpath";
 			} else {
 				in = new FileInputStream(SYSCONFIGFILE);
 				prop.load(in);
-				this.xmlPath = prop.getProperty(XMLPATH, currentpath + "\\xml");
-				this.rptPath = prop.getProperty(RPTPATH, currentpath + "\\label");
-				this.stationPath = prop.getProperty(STATIONPATH, currentpath + "\\log");
-				this.pdfPath = prop.getProperty(PDFPATH, currentpath + "\\pdf");
+				this.xmlPath = prop.getProperty(XMLPATH, currentpath + "/xml");
+				this.rptPath = prop.getProperty(RPTPATH, currentpath + "/label");
+				this.stationPath = prop.getProperty(STATIONPATH, currentpath + "/log");
+				this.pdfPath = prop.getProperty(PDFPATH, currentpath + "/pdf");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -100,13 +102,13 @@ public class PrintXmlService extends PrintService {
 				prop.load(in);
 				Iterator<String> it = prop.stringPropertyNames().iterator();
 				while (it.hasNext()) {
+
 					String key = it.next();
 					String value = prop.getProperty(key);
 					addPrinter(key, value);
 				}
 			}
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		} finally {
 			if (in != null) {
@@ -167,14 +169,16 @@ public class PrintXmlService extends PrintService {
 			logPathPath.mkdirs();
 		}
 	}
-
+    //添加打印机
 	public void addPrinter(String printerName, String osprintername) {
+		//避免重复添加
 		if (!allPrinter.containsKey(printerName.toUpperCase())) {
+			
 			XmlPrinter xmlPrinter = new XmlPrinter(printerName, this);
 			xmlPrinter.setOsPrinterName(osprintername);
 			allPrinter.put(printerName, xmlPrinter);
-			xmlPrinter.startXmlPrintThread();
-
+			xmlPrinter.startXmlPrintThread();//启动打印线程
+			
 		}
 	}
 
@@ -381,6 +385,7 @@ public class PrintXmlService extends PrintService {
 		_CleanXmlThread cleanXmlThread = new _CleanXmlThread();
 		cleanXmlThread.start();
 	}
+
 	// 清理bak文件线程
 	public void startCleanBakThread() {
 		_CleanStationThread cleanStationThread = new _CleanStationThread();
@@ -452,6 +457,7 @@ public class PrintXmlService extends PrintService {
 					e.printStackTrace();
 				}
 				try {
+					//100分钟清理一次
 					Thread.sleep(6000000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -459,6 +465,7 @@ public class PrintXmlService extends PrintService {
 			}
 		}
 	}
+
 	public class _CleanStationThread extends Thread {
 		@Override
 		public void run() {
@@ -470,7 +477,8 @@ public class PrintXmlService extends PrintService {
 					e.printStackTrace();
 				}
 				try {
-					Thread.sleep(6000000);
+					//1天清理
+					Thread.sleep(144000000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -487,10 +495,8 @@ public class PrintXmlService extends PrintService {
 			return;
 		File[] allFile = dir.listFiles();
 		Calendar currentDate = Calendar.getInstance();
-		currentDate.add(Calendar.DATE,
-				Integer.parseInt(
-						"".equals(ConfigUtil.getProperty("pdfclean")) ? "1" : ConfigUtil.getProperty("pdfclean"))
-						* -1);
+		currentDate.add(Calendar.DATE, 
+				"".equals(ConfigUtil.getProperty("pdfclean")) ? -30 :Integer.parseInt(ConfigUtil.getProperty("pdfclean")) * -1);
 		for (File f : allFile) {
 			Calendar createDate = Calendar.getInstance();
 			createDate.setTimeInMillis(f.lastModified());
@@ -505,12 +511,13 @@ public class PrintXmlService extends PrintService {
 			}
 		}
 	}
+
 	/**
 	 * delete bak
 	 */
-	public  void cleanStation(String cleanPath) {
-		
-		File dir = new File(cleanPath+"/bak");
+	public void cleanStation(String cleanPath) {
+
+		File dir = new File(cleanPath + "/bak");
 		if (!dir.exists()) {
 			return;
 		}
@@ -518,10 +525,11 @@ public class PrintXmlService extends PrintService {
 			return;
 		}
 		File[] allFile = dir.listFiles();
-		
+
 		for (File f : allFile) {
 			Calendar currentDate = Calendar.getInstance();
-			currentDate.add(Calendar.DATE, (ConfigUtil.getProperty("stationclean").equals("")?-1:(Integer.parseInt(ConfigUtil.getProperty("stationclean"))*-1)));
+			currentDate.add(Calendar.DATE, (ConfigUtil.getProperty("stationclean").equals("") ? -30
+					: (Integer.parseInt(ConfigUtil.getProperty("stationclean")) * -1)));
 			Calendar createDate = Calendar.getInstance();
 			createDate.setTimeInMillis(f.lastModified());
 			if (currentDate.after(createDate) || !f.getName().contains(".xml")) {
@@ -532,10 +540,7 @@ public class PrintXmlService extends PrintService {
 						e.printStackTrace();
 					}
 				}
-			}		
-		
-
-		
+			}
 
 		}
 	}
@@ -571,7 +576,7 @@ public class PrintXmlService extends PrintService {
 	}
 
 	/**
-	 * @author Administrator 
+	 * @author Administrator
 	 * @function 分发文件到客户端读取区
 	 */
 	public class _deliverThread extends Thread {
@@ -612,7 +617,7 @@ public class PrintXmlService extends PrintService {
 	}
 
 	/**
-	 * @author deski  
+	 * @author deski
 	 * @function 获取服务端打印任务
 	 *
 	 */
@@ -640,7 +645,7 @@ public class PrintXmlService extends PrintService {
 	public String addToDeliverSequence(File xml) {
 		InputStream inStream = null;
 		FileOutputStream fs = null;
-		String Taskname = ConfigUtil.getProperty("deliverpath") + "/" + xml.getName();
+		String Taskname = ConfigUtil.getProperty("deliverpath").equals("") + "/" + xml.getName();
 		try {
 			if (xml.exists()) {
 				inStream = new FileInputStream(xml);

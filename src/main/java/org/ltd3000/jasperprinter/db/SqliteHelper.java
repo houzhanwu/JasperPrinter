@@ -18,7 +18,8 @@ import org.apache.log4j.Logger;
  * @author xushanshan
  */
 public class SqliteHelper {
-	private static final Logger log = Logger.getLogger("SqliteHelper");// LOG
+	// LOG
+	private static final Logger log = Logger.getLogger("SqliteHelper");
 
 	private Connection connection;
 	private Statement statement;

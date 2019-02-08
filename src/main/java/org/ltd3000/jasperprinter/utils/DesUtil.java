@@ -9,7 +9,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
 /**
- * @author xushanshan 1539601747@qq.com
+ * @author xushanshan 
+ * @email 1539601747@qq.com
  *
  */
 public class DesUtil {
@@ -30,9 +31,8 @@ public class DesUtil {
 			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 			// 用密匙初始化Cipher对象,ENCRYPT_MODE用于将 Cipher 初始化为加密模式的常量
 			cipher.init(Cipher.ENCRYPT_MODE, securekey, random);
-			// 现在，获取数据并加密
-			// 正式执行加密操作
-			return cipher.doFinal(data); // 按单部分操作加密或解密数据，或者结束一个多部分操作
+			// 按单部分操作加密或解密数据，或者结束一个多部分操作
+			return cipher.doFinal(data); 
 		} catch (Throwable e) {
 			e.printStackTrace();
 			return null;

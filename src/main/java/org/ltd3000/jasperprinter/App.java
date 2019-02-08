@@ -27,7 +27,6 @@ public class App {
 		}
 
 		// 软件许可检测
-		// DBUtil.checkPermission()
 		if (SecureUtil.checkAuth()) {
 			logger.info("软件许可验证通过！");
 			
