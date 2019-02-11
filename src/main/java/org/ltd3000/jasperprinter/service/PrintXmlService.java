@@ -645,7 +645,7 @@ public class PrintXmlService extends PrintService {
 	public String addToDeliverSequence(File xml) {
 		InputStream inStream = null;
 		FileOutputStream fs = null;
-		String Taskname = ConfigUtil.getProperty("deliverpath").equals("") + "/" + xml.getName();
+		String Taskname = (ConfigUtil.getProperty("deliverpath").equals("")?stationPath+"/deliver":ConfigUtil.getProperty("deliverpath")) + "/" + xml.getName();
 		try {
 			if (xml.exists()) {
 				inStream = new FileInputStream(xml);
