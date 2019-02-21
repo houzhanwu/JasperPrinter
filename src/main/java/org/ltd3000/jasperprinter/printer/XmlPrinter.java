@@ -221,6 +221,7 @@ public class XmlPrinter extends JasperPrinter {
 	 */
 	public List<XMLTaskParam> checkAndFindTask() {
 		String xmlPath = labelService.getXmlPath();
+
 		File dir = new File(xmlPath);
 		List<XMLTaskParam> listTask = new ArrayList<XMLTaskParam>();
 		if (!dir.exists()) {
@@ -234,6 +235,7 @@ public class XmlPrinter extends JasperPrinter {
 			public boolean accept(File pathname) {
 				if (pathname.isFile() && pathname.getName().toLowerCase().endsWith(".xml") && pathname.length() > 0
 						&& pathname.canRead()) {
+				
 					XMLTaskParam printParam = findLabel(pathname, null);// 1
 					if (printerName.equalsIgnoreCase(printParam.printerName)) {
 						return true;

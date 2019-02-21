@@ -18,6 +18,7 @@ import org.ltd3000.jasperprinter.service.PrintDatabaseService;
 import org.ltd3000.jasperprinter.service.PrintXmlService;
 import org.ltd3000.jasperprinter.utils.ConfigUtil;
 import org.ltd3000.jasperprinter.utils.FtpUtils;
+import org.ltd3000.jasperprinter.utils.SecureUtil;
 
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
@@ -40,13 +41,13 @@ public class UIMain {
 	public void setFrmVisable() {
 		this.frmV.setVisible(true);
 	}
-	
+
 	/**
 	 * @初始化系统参数与界面与服务
 	 */
 	private void initialize() {
 		frmV = new JFrame();
-		frmV.setTitle("Jasper单证打印服务  V" + ConfigUtil.getProperty("version")+"["+DBUtil.getJasperCount()+"]");
+		frmV.setTitle("Jasper单证打印服务  V" + ConfigUtil.getProperty("version") + "[" + DBUtil.getJasperCount() + "]");
 		frmV.setBounds(100, 100, 450, 300);
 		frmV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmV.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -79,7 +80,7 @@ public class UIMain {
 						public void run() {
 							if (FtpUtils.downloadAllJasperFile()) {
 								JOptionPane.showMessageDialog(null, "同步完成!");
-							}else {
+							} else {
 								JOptionPane.showMessageDialog(null, "同步失败，请查看日志");
 							}
 						}
@@ -88,7 +89,7 @@ public class UIMain {
 				}
 			});
 			mmenuSyc.add(mitemSyc);
-			//jar
+			// jar
 			JMenuItem mitemexe = new JMenuItem("更新打印程序");
 			mitemexe.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -142,7 +143,7 @@ public class UIMain {
 					PrintDatabaseService service = PrintDatabaseService.getInstance();
 					service.setActive(true);
 
-				} else if(ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
+				} else if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
 					// 启动XML类型打印
 					PrintXmlService service = PrintXmlService.getInstance();
 					service.setActive(true);
@@ -159,7 +160,7 @@ public class UIMain {
 				if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("database")) {
 					PrintDatabaseService service = PrintDatabaseService.getInstance();
 					service.setActive(false);
-				} else if(ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
+				} else if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
 					PrintXmlService service = PrintXmlService.getInstance();
 					service.setActive(false);
 				}
@@ -167,6 +168,8 @@ public class UIMain {
 			}
 		});
 		menuService.add(mitemStop);
+
+
 		frmV.getContentPane().setLayout(new BoxLayout(frmV.getContentPane(), BoxLayout.X_AXIS));
 
 		JScrollPane sclpnlMain = new JScrollPane();
@@ -183,7 +186,7 @@ public class UIMain {
 		});
 		tblMain.getColumnModel().getColumn(0).setResizable(false);
 		sclpnlMain.setViewportView(tblMain);
-		//主界面增加打印机控制
+		// 主界面增加打印机控制
 		tblMain.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblMain.addMouseListener(new MouseAdapter() {
 			@Override
@@ -275,10 +278,10 @@ public class UIMain {
 			if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("database")) {
 				PrintDatabaseService Databaseservice = PrintDatabaseService.getInstance();
 				data = Databaseservice.getPrinterStatusModel();
-			} else if(ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
+			} else if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
 				PrintXmlService Xmlservice = PrintXmlService.getInstance();
 				data = Xmlservice.getPrinterStatusModel();
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(null, "请配置打印类型printtype=xml|database");
 				System.exit(0);
 			}
@@ -300,10 +303,10 @@ public class UIMain {
 			if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("database")) {
 				PrintDatabaseService Databaseservice = PrintDatabaseService.getInstance();
 				data = Databaseservice.getPrinterStatusModel();
-			} else if(ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
+			} else if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
 				PrintXmlService Xmlservice = PrintXmlService.getInstance();
 				data = Xmlservice.getPrinterStatusModel();
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(null, "请配置打印类型printtype=xml|database");
 				System.exit(0);
 			}
@@ -334,7 +337,7 @@ public class UIMain {
 			super();
 			this.table = table;
 		}
-		
+
 		@Override
 		public void run() {
 			while (true) {
@@ -342,7 +345,8 @@ public class UIMain {
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						table.updateUI();
-						frmV.setTitle("Jasper单证打印服务  V" + ConfigUtil.getProperty("version")+"["+DBUtil.getJasperCount()+"]");
+						frmV.setTitle("Jasper单证打印服务  V" + ConfigUtil.getProperty("version") + "["
+								+ DBUtil.getJasperCount() + "]");
 					}
 				});
 				try {

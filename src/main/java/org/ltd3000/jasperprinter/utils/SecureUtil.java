@@ -55,7 +55,7 @@ public class SecureUtil {
 	 * @function 公钥解密
 	 * @return byte
 	 */
-	public static byte[] decryptByRSA1(byte[] pubKeyInByte, byte[] data) {
+	private static byte[] decryptByRSA1(byte[] pubKeyInByte, byte[] data) {
 		try {
 			KeyFactory mykeyFactory = KeyFactory.getInstance("RSA");
 			X509EncodedKeySpec pub_spec = new X509EncodedKeySpec(pubKeyInByte);
@@ -73,7 +73,7 @@ public class SecureUtil {
 	 * @function 解密字符串
 	 * @return
 	 */
-	public static String decodeString(String encodeString) {
+	private static String decodeString(String encodeString) {
 		try {
 			RSAPublicKey pKey = getPublicKey(keyStorePath);
 			byte[] stringByte = decryptByRSA1(pKey.getEncoded(), Base64.decodeBase64(encodeString));
@@ -85,7 +85,23 @@ public class SecureUtil {
 
 		return null;
 	}
+	public static String  getAuthString() {
 
+		String authkey = ConfigUtil.getProperty("authkey");
+		JSONObject keyJson = (JSONObject) JSONObject.parse(authkey);
+		String encodeDesPass = keyJson.getString("p");
+		String encodeDesData = keyJson.getString("d");
+		String decodeDesPass = decodeString(encodeDesPass);
+		try {
+			String desDecodeString = DesUtil.decrypt(encodeDesData, decodeDesPass);
+			return desDecodeString;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "无效授权信息";
+		}
+	
+		
+	}
 	public static boolean checkAuth() {
 		String authkey = ConfigUtil.getProperty("authkey");
 		JSONObject keyJson = (JSONObject) JSONObject.parse(authkey);
