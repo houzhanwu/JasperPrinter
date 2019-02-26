@@ -348,8 +348,11 @@ public class XmlPrinter extends JasperPrinter {
 			log.info("装载JRXmlDataSource失败:" + xml.getAbsolutePath());
 			log.error(jre.getMessage());
 		}
-		if (jasperPrint == null)
-			return false;
+		if (jasperPrint == null) {
+			log.error("打印机初始化失败。");
+			return false;	
+		}
+			
 
 		PrintService[] pss = PrinterJob.lookupPrintServices();
 		PrintService ps = null;
@@ -400,7 +403,8 @@ public class XmlPrinter extends JasperPrinter {
 				}
 			}
 			return true;
-		} catch (Exception e) {
+		} catch (JRException e) {
+			log.error("Jasper打印失败");
 			e.printStackTrace();
 			return false;
 		}
