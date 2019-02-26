@@ -37,7 +37,7 @@ import net.sf.jasperreports.export.SimplePrintServiceExporterConfiguration;
 
 /**
  * @author xushanshan
- * @数据库类型打印机
+ * @descrip 数据库类型打印机
  *
  */
 public class DatabasePrinter extends JasperPrinter {

@@ -1,5 +1,6 @@
 package org.ltd3000.jasperprinter.service;
 
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -102,9 +103,22 @@ public class PrintXmlService extends PrintService {
 				prop.load(in);
 				Iterator<String> it = prop.stringPropertyNames().iterator();
 				while (it.hasNext()) {
-
 					String key = it.next();
 					String value = prop.getProperty(key);
+					//验证本地打印机是否存在,并且给出报警
+                   javax.print.PrintService[] pss = PrinterJob.lookupPrintServices();
+                   javax.print.PrintService ps = null;
+					for (int i = 0; i < pss.length; i++) {
+						if (value.equalsIgnoreCase(pss[i].getName())) {
+							ps = pss[i];
+							break;
+						}
+					}
+					if (ps == null) {
+						log.error("未找到系统打印机:["+value+"]");
+						JOptionPane.showMessageDialog(null,"系统打印机["+value+"]不存在，程序仍将运行，但此打印机将不可用");
+					}
+					//					
 					addPrinter(key, value);
 				}
 			}

@@ -55,7 +55,7 @@ public class XmlPrinter extends JasperPrinter {
 
 	private PrintXmlService labelService = null;// 打印服务
 
-	private static final Logger log = Logger.getLogger("XMLPrinter");
+	private static final Logger log = Logger.getLogger("XMLPrinter");//Log
 
 	private Map<String, Integer> statusTotal = new HashMap<String, Integer>();// 打印信息统计
 
@@ -142,6 +142,7 @@ public class XmlPrinter extends JasperPrinter {
 
 		@Override
 		public void run() {
+			//主轮寻
 			while (true) {
 				try {
 					if (xmlPrinter.isStopThread())
@@ -168,7 +169,7 @@ public class XmlPrinter extends JasperPrinter {
 						}
 					}
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -336,7 +337,7 @@ public class XmlPrinter extends JasperPrinter {
 	}
 
 	/*
-	 * 打印1
+	 * 打印
 	 */
 	public boolean printXmlLabel(File label, File xml, int copies, File taskfile,String orderkey) {
 		JasperPrint jasperPrint = null;
@@ -344,7 +345,6 @@ public class XmlPrinter extends JasperPrinter {
 			jasperPrint = JasperFillManager.fillReport(label.getAbsolutePath(), null,
 					new JRXmlDataSource(xml, "/labels/label"));
 		} catch (Exception jre) {
-			jre.printStackTrace();
 			log.info("装载JRXmlDataSource失败:" + xml.getAbsolutePath());
 			log.error(jre.getMessage());
 		}
@@ -360,6 +360,7 @@ public class XmlPrinter extends JasperPrinter {
 			}
 		}
 		if (ps == null) {
+			log.error("未找到系统打印机！");
 			return false;
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("-yyyy-MM-dd HH:mm:ss SSS");
@@ -411,26 +412,22 @@ public class XmlPrinter extends JasperPrinter {
 	 * @param filename
 	 * @return
 	 */
-	public boolean exportXls(JasperPrint jasperPrint,String filename) {
-		
-		JRXlsxExporter exporter = new JRXlsxExporter();
-		//设置输入项
-		ExporterInput exporterInput = new SimpleExporterInput(jasperPrint);
-		exporter.setExporterInput(exporterInput);
-		
-		//设置输出项
-		OutputStreamExporterOutput exporterOutput = new SimpleOutputStreamExporterOutput(filename);
-		exporter.setExporterOutput(exporterOutput);
-		
-		try {
-			exporter.exportReport();
-			return true;
-		} catch (JRException e1) {			
-			e1.printStackTrace();
-			return false;
-		}
-		
-	}
+	/*
+	 * public boolean exportXls(JasperPrint jasperPrint,String filename) {
+	 * 
+	 * JRXlsxExporter exporter = new JRXlsxExporter(); //设置输入项 ExporterInput
+	 * exporterInput = new SimpleExporterInput(jasperPrint);
+	 * exporter.setExporterInput(exporterInput);
+	 * 
+	 * //设置输出项 OutputStreamExporterOutput exporterOutput = new
+	 * SimpleOutputStreamExporterOutput(filename);
+	 * exporter.setExporterOutput(exporterOutput);
+	 * 
+	 * try { exporter.exportReport(); return true; } catch (JRException e1) {
+	 * e1.printStackTrace(); return false; }
+	 * 
+	 * }
+	 */
 
 	// 移动文件到日志区域
 	private boolean moveToLog(File xml) {
@@ -493,7 +490,7 @@ public class XmlPrinter extends JasperPrinter {
 				SAXReader reader = new SAXReader();
 				org.dom4j.Document doc = reader.read(inStream);
 				doc.setDocType(null);
-				//如果要启用客户端格式转换，请放开下面部分
+				//如果要启用客户端格式转换,请放开下面部分
 				/*List<org.dom4j.Element> labelList=doc.selectNodes("labels/label");
 				for(org.dom4j.Element label:labelList ) {//循环
 					List<org.dom4j.Element> nodeList=label.selectNodes("variable");
