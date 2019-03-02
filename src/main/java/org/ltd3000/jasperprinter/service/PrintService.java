@@ -8,7 +8,7 @@ public class PrintService implements IPrintService{
 
 
 	//打印服务状态
-	public boolean active = false;
+	public boolean serviceStatus = false;
 	public final String PDFPATH = "pdfpath";
 
 	public final String RPTPATH = "rptpath";
@@ -24,14 +24,14 @@ public class PrintService implements IPrintService{
 
 
 	@Override
-	public boolean isActive() {
+	public boolean getServiceStatus() {
 		// TODO Auto-generated method stub
-		return this.active;
+		return this.serviceStatus;
 	}
 
 	@Override
-	public void setActive(boolean active) {
-		this.active=active;
+	public void setServiceStatus(boolean active) {
+		this.serviceStatus=active;
 		
 	}
 

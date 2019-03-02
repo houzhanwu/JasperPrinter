@@ -21,7 +21,7 @@ import org.dom4j.io.XMLWriter;
 import org.jfree.util.Log;
 import org.ltd3000.jasperprinter.db.DBUtil;
 import org.ltd3000.jasperprinter.printer.XmlPrinter;
-import org.ltd3000.jasperprinter.utils.ClientUtil;
+import org.ltd3000.jasperprinter.utils.DeliverUtil;
 import org.ltd3000.jasperprinter.utils.ConfigUtil;
 import org.ltd3000.jasperprinter.utils.FtpUtils;
 
@@ -42,7 +42,7 @@ public class PrintXmlService extends PrintService {
 		log.info("打印服务类型为XML打印");
 		loadConfig();// 加载工作区配置
 		loadPrinter();// 加载打印机
-		this.setActive(true);//启动服务
+		this.setServiceStatus(true);//启动服务
 		startCleanPDFThread();//启动PDF清理线程
 		startCleanXMLThread();//启动XML清理线程
 		startCleanBakThread();//启动备份task文件清理线程
@@ -279,12 +279,12 @@ public class PrintXmlService extends PrintService {
 		return instance;
 	}
 
-	public boolean isActive() {
-		return active;
+	public boolean getServiceStatus() {
+		return serviceStatus;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setServiceStatus(boolean active) {
+		this.serviceStatus = active;
 	}
 
 	public void saveConfigPath(String xmlPath, String labelPath, String logPath, String pdfPath) {
@@ -610,8 +610,8 @@ public class PrintXmlService extends PrintService {
 					if (findFile != null) {
 						// 移动
 						for (int i = 0; i < findFile.length; i++) {
-							String printerName = ClientUtil.getPrinterName(findFile[i].getName());
-							if (ClientUtil.isClientPrinter(printerName)) {
+							String printerName = DeliverUtil.getPrinterName(findFile[i].getName());
+							if (DeliverUtil.isClientPrinter(printerName)) {
 								// move to
 								addToDeliverSequence(findFile[i]);
 							}

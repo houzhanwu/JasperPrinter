@@ -141,12 +141,12 @@ public class UIMain {
 				if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("database")) {
 					// 启动数据库类型打印服务
 					PrintDatabaseService service = PrintDatabaseService.getInstance();
-					service.setActive(true);
+					service.setServiceStatus(true);
 
 				} else if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
 					// 启动XML类型打印
 					PrintXmlService service = PrintXmlService.getInstance();
-					service.setActive(true);
+					service.setServiceStatus(true);
 				}
 
 				logger.info("开启打印服务!");
@@ -159,10 +159,10 @@ public class UIMain {
 			public void actionPerformed(ActionEvent e) {
 				if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("database")) {
 					PrintDatabaseService service = PrintDatabaseService.getInstance();
-					service.setActive(false);
+					service.setServiceStatus(false);
 				} else if (ConfigUtil.getProperty("printtype").equalsIgnoreCase("xml")) {
 					PrintXmlService service = PrintXmlService.getInstance();
-					service.setActive(false);
+					service.setServiceStatus(false);
 				}
 				logger.info("停止打印服务!");
 			}

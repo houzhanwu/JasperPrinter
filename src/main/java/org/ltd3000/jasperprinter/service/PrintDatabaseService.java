@@ -44,7 +44,7 @@ public class PrintDatabaseService extends PrintService {
 		//数据库预处理
 		prepareDatabase();
 		//启动打印服务
-		this.setActive(true);
+		this.setServiceStatus(true);
 		//启动清理PDF线程
 		startCleanThread();
 	}
@@ -308,12 +308,12 @@ public class PrintDatabaseService extends PrintService {
 		return instance;
 	}
 
-	public boolean isActive() {
-		return active;
+	public boolean getServiceStatus() {
+		return serviceStatus;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setServiceStatus(boolean active) {
+		this.serviceStatus = active;
 	}
 
 	public void saveConfigPath(String labelPath, String logPath, String pdfPath, String urlPath) {

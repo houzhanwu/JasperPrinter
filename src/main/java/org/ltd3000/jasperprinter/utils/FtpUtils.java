@@ -61,8 +61,8 @@ public class FtpUtils {
 			}
 			FTPFile[] fileList = ftpClient.listFiles();
 			for (int i = 0; i < fileList.length; i++) {
-				String xmlPrintername = ClientUtil.getPrinterName(fileList[i].getName());
-				if (ClientUtil.isClientPrinter(xmlPrintername)) {
+				String xmlPrintername = DeliverUtil.getPrinterName(fileList[i].getName());
+				if (DeliverUtil.isClientPrinter(xmlPrintername)) {
 					// download and delete XML task
 					File localFile = new File(localDir.getPath() + File.separatorChar + fileList[i].getName());
 					OutputStream os = new FileOutputStream(localFile);

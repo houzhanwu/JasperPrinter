@@ -39,16 +39,10 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
 import net.sf.jasperreports.engine.export.JRExporterContext;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
-//import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-//import net.sf.jasperreports.export.ExporterConfiguration;
-import net.sf.jasperreports.export.ExporterInput;
 import net.sf.jasperreports.export.ExporterOutput;
-import net.sf.jasperreports.export.OutputStreamExporterOutput;
 import net.sf.jasperreports.export.PrintServiceExporterConfiguration;
 import net.sf.jasperreports.export.PrintServiceReportConfiguration;
 import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePrintServiceExporterConfiguration;
 
 public class XmlPrinter extends JasperPrinter {
@@ -147,7 +141,7 @@ public class XmlPrinter extends JasperPrinter {
 				try {
 					if (xmlPrinter.isStopThread())
 						break;
-					if (service.isActive() && xmlPrinter.isPrinterActive()) {
+					if (service.getServiceStatus() && xmlPrinter.isPrinterActive()) {
 						xmlPrinter.setStatus("0");
 						// 获取打印队列
 						List<XMLTaskParam> listtask = xmlPrinter.checkAndFindTask();
@@ -162,7 +156,7 @@ public class XmlPrinter extends JasperPrinter {
 						}
 
 					} else {
-						if (service.isActive()) {
+						if (service.getServiceStatus()) {
 							xmlPrinter.setStatus("-999");
 						} else {
 							xmlPrinter.setStatus("-888");
@@ -404,8 +398,7 @@ public class XmlPrinter extends JasperPrinter {
 			}
 			return true;
 		} catch (JRException e) {
-			log.error("Jasper打印失败");
-			e.printStackTrace();
+			log.error(e.getMessage());			
 			return false;
 		}
 

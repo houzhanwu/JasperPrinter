@@ -1,6 +1,5 @@
 package org.ltd3000.jasperprinter;
 
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import org.ltd3000.jasperprinter.db.DBUtil;
 import org.ltd3000.jasperprinter.ui.UIMain;
@@ -9,10 +8,9 @@ import org.ltd3000.jasperprinter.utils.SecureUtil;
 
 /**
  * @author xushanshan
- * @authrized to 2020-02-11
+ * @authrized to 2020-03-10
  * @license 许可证书 jasper.public
- *          authkey={"p"\:"hN2LwpKardmSm3Xpj9PJFZDmHpZWotNnXaFWUsbBdyFO4H9nKqRN+ev/GHKxi6gQN3CVxPRP7AUUaaJn9hr4tV0QOd1MYMxxtHAgKbfSWSHuDSX1XRAztaGwzxXBMNMy61gDDBHMaO5MN8o3g987sOM82AzvaghPFdi+uT2XQME\=","d"\:"4BA78F08F874CF071231B82D7C66B319B3C69265AADB6F1E3F7E3EE5D47FA7B9B958F5A99FDEAE0BED80D6FE9991FB4DBD022E3AFC285EFFEF296DFF13414BDBDE13B0536113F87E1EA075E097BCD1BD9B8CCAB6C726B110461C24346435638F0FB909EE23F3B913"}
- * 
+ * {"p":"kbXNAfFXEsM4S0YHQaOhtRyac7nGoXZDt7jHa1+5z1a7JJF38yq+lk5xlT67UUlWpQ8hHNHemtL4agRe0q3TCuJ2e1MtHTUc9wvMFzoG0dcnSZfkp1XGO46ipy2xTeE86xXuH668oCrMibx2Bb/R+acaiVUG5LuldRKZFuHw/R4=","d":"A035ACB8A6BB3F70B0020670B96A1490C36306AF23857F2E5707F761162EFDA4B5B206DF9B4BB88633C140752F1ACB2D43F356992043905BBC92CB647DB4250E3445BDE1CE8A4565C2C2A2DD598C7A0E"}
  *
  */
 public class App {
@@ -39,6 +37,7 @@ public class App {
 			} else {
 				System.exit(0);
 			}
+
 
 		/*
 		 * } else { JOptionPane.showMessageDialog(null,

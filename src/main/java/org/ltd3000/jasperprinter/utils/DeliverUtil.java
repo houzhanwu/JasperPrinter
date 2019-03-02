@@ -6,7 +6,7 @@ package org.ltd3000.jasperprinter.utils;
  * @class 客户打印工具类
  *
  */
-public class ClientUtil {
+public class DeliverUtil {
 	/**
 	 * @function 从打印任务xml文件名获取打印机名称
 	 */

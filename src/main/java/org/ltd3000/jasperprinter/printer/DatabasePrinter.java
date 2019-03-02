@@ -238,7 +238,7 @@ public class DatabasePrinter extends JasperPrinter {
 					try {
 						if (databasePrinter.isStopThread())
 							break;
-						if (service.isActive() && databasePrinter.isPrinterActive()) {
+						if (service.getServiceStatus() && databasePrinter.isPrinterActive()) {
 							databasePrinter.setStatus("0");
 							String sql = "select * from JasperTask t where t.status='0' and t.printname='"
 									+ databasePrinter.getPrinterName() + "' ";
@@ -262,7 +262,7 @@ public class DatabasePrinter extends JasperPrinter {
 							rs.close();
 
 						} else {
-							if (service.isActive()) {
+							if (service.getServiceStatus()) {
 								databasePrinter.setStatus("-999");
 							} else {
 								databasePrinter.setStatus("-888");
