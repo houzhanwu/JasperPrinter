@@ -21,10 +21,10 @@ public class DeliverUtil {
 	 * @function 判断打印机是否是客户端或者服务器注册的客户端打印机
 	 */
 	public static boolean isClientPrinter(String printerName) {
-		if ("".equals(ConfigUtil.getProperty("print_list"))) {
+		if ("".equals(ConfigUtil.getProperty("printlist"))) {
 			return false;
 		}
-		String[] printerlist = ConfigUtil.getProperty("print_list").split(",");
+		String[] printerlist = ConfigUtil.getProperty("printlist").split(",");
 		return findString(printerlist, printerName);
 
 	}

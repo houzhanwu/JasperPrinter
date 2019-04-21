@@ -92,7 +92,7 @@ public class FtpUtils {
 		FTPClient ftpClient = getFTPClient();
 
 		try {
-			ftpClient.changeWorkingDirectory("exe");
+			ftpClient.changeWorkingDirectory("jar");
 			File localDir = new File(ConfigUtil.getCurrentPath());
 			if (!localDir.exists()) {
 				localDir.mkdir();
