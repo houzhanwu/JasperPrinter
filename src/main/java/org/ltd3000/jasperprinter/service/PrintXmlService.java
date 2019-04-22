@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.jfree.util.Log;
 import org.ltd3000.jasperprinter.db.DBUtil;
 import org.ltd3000.jasperprinter.printer.XmlPrinter;
 import org.ltd3000.jasperprinter.utils.DeliverUtil;
@@ -48,12 +47,23 @@ public class PrintXmlService extends PrintService {
 		startCleanBakThread();//启动备份task文件清理线程
 		if ("master".equalsIgnoreCase(ConfigUtil.getProperty("mode"))) {
 			startDeliverThread();
-			Log.info("打印模式为服务器");
+			log.info("打印模式为服务器");
 		} else if ("slave".equalsIgnoreCase(ConfigUtil.getProperty("mode"))) {
 			startClientThread();
 			startUpdateThread();
-			Log.info("打印模式为客户端");
+			log.info("打印模式为客户端");
 		}
+		//自动更新模板
+		new Thread() {
+			@Override
+			public void run() {
+				if (FtpUtils.downloadAllJasperFile()) {
+					log.info("同步模板完成!");
+				} else {
+					log.info("同步模板失败，请查看日志");
+				}
+			}
+		}.start();
 	}
 
 	// 加载工作区配置

@@ -1,5 +1,7 @@
 package org.ltd3000.jasperprinter;
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.Logger;
 import org.ltd3000.jasperprinter.db.DBUtil;
 import org.ltd3000.jasperprinter.ui.UIMain;
