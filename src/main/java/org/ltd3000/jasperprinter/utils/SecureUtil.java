@@ -17,7 +17,6 @@ import javax.crypto.Cipher;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author deski
@@ -88,36 +87,21 @@ public class SecureUtil {
 	public static String  getAuthString() {
 
 		String authkey = ConfigUtil.getProperty("authkey");
-		JSONObject keyJson = (JSONObject) JSONObject.parse(authkey);
-		String encodeDesPass = keyJson.getString("p");
-		String encodeDesData = keyJson.getString("d");
-		String decodeDesPass = decodeString(encodeDesPass);
-		try {
-			String desDecodeString = DesUtil.decrypt(encodeDesData, decodeDesPass);
-			return desDecodeString;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "无效授权信息";
-		}
+
+		return decodeString(authkey);
+
 	
 		
 	}
 	public static boolean checkAuth() {
 		String authkey = ConfigUtil.getProperty("authkey");
-		JSONObject keyJson = (JSONObject) JSONObject.parse(authkey);
-		String encodeDesPass = keyJson.getString("p");
-		String encodeDesData = keyJson.getString("d");
-		String decodeDesPass = decodeString(encodeDesPass);
+		String decodeDesPass = decodeString(authkey);
 		try {
-			String desDecodeString = DesUtil.decrypt(encodeDesData, decodeDesPass);
-			JSONObject dataJson = (JSONObject) JSONObject.parse(desDecodeString);
-			JSONObject lJson = (JSONObject) dataJson.get("l");
-			String slaveDate = lJson.getString("s");
 			Calendar cNow = Calendar.getInstance();
 			Calendar cSlave = Calendar.getInstance();
-			cSlave.set(Calendar.YEAR, Integer.parseInt(slaveDate.substring(0, 4)));
-			cSlave.set(Calendar.MONTH, Integer.parseInt(slaveDate.substring(5, 7)) - 1);
-			cSlave.set(Calendar.DATE, Integer.parseInt(slaveDate.substring(8, 10)));
+			cSlave.set(Calendar.YEAR, Integer.parseInt(decodeDesPass.substring(0, 4)));
+			cSlave.set(Calendar.MONTH, Integer.parseInt(decodeDesPass.substring(5, 7)) - 1);
+			cSlave.set(Calendar.DATE, Integer.parseInt(decodeDesPass.substring(8, 10)));
 			if (cNow.before(cSlave)) {
 				return true;
 			} else {
